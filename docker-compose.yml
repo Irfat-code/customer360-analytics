@@ -100,7 +100,7 @@ services:
   # DBT — Transformation layer (runs as a service for ad-hoc commands)
   # ---------------------------------------------------------------------------
   dbt:
-    image: ghcr.io/dbt-labs/dbt-core:1.8.0
+    image: ghcr.io/dbt-labs/dbt-postgres:1.8.2
     container_name: c360_dbt
     restart: "no"
     environment:

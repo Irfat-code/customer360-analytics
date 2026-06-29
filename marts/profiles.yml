@@ -1,0 +1,12 @@
+customer360:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      port: 5432
+      database: customer360
+      user: postgres
+      password: customer360
+      schema: staging
+      threads: 4
