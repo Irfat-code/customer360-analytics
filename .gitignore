@@ -1,0 +1,36 @@
+# =============================================================================
+# CUSTOMER360 INTELLIGENCE PLATFORM
+# .gitignore
+# =============================================================================
+
+# Logs
+logs/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+venv/
+.venv/
+
+# dbt
+marts/target/
+marts/dbt_packages/
+marts/logs/
+
+# Docker
+.docker/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Data files (can be large)
+datasets/**/*.csv
+datasets/**/*.json
+datasets/**/*.parquet
