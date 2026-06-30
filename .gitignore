@@ -16,9 +16,11 @@ venv/
 .venv/
 
 # dbt
-marts/target/
-marts/dbt_packages/
-marts/logs/
+**/target/
+**/dbt_packages/
+**/logs/
+**/.user.yml
+
 
 # Docker
 .docker/
