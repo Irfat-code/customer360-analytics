@@ -152,7 +152,7 @@ sub_statuses_weighted = ["Active"] * 70 + ["Cancelled"] * 12 + ["Expired"] * 10 
 subscriptions = []
 subscription_ids = []
 
-for _ in range(NUM_SUBSCRIPTIONS):
+for company_id in company_ids:
     sid      = f"SUB-{random_id()}"
     plan     = random.choice(plans)
     status   = random.choice(sub_statuses_weighted)
@@ -164,7 +164,7 @@ for _ in range(NUM_SUBSCRIPTIONS):
     subscription_ids.append(sid)
     subscriptions.append((
         sid,
-        random.choice(company_ids),
+        company_id,
         plan[0], plan[1],
         status,
         plan[2], plan[3],
