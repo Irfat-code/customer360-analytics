@@ -147,7 +147,7 @@ plans = [
     ("Enterprise", "Enterprise", 15000,  180000),
     ("Ultimate",   "Enterprise", 50000,  600000),
 ]
-sub_statuses = ["Active", "Cancelled", "Expired", "Trial"]
+sub_statuses_weighted = ["Active"] * 70 + ["Cancelled"] * 12 + ["Expired"] * 10 + ["Trial"] * 8
 
 subscriptions = []
 subscription_ids = []
@@ -155,7 +155,7 @@ subscription_ids = []
 for _ in range(NUM_SUBSCRIPTIONS):
     sid      = f"SUB-{random_id()}"
     plan     = random.choice(plans)
-    status   = random.choice(sub_statuses)
+    status   = random.choice(sub_statuses_weighted)
     start    = random_date(730, 30)
     renewed  = start + timedelta(days=365)
     expires  = renewed + timedelta(days=365)
@@ -232,7 +232,7 @@ for _ in range(NUM_TICKETS):
     created  = random_date(365, 0)
     first_r  = created + timedelta(hours=random.randint(1, 48))
     resolved = first_r + timedelta(hours=random.randint(1, 168))
-    status   = random.choice(ticket_statuses)
+    status = random.choice(sub_statuses_weighted)
     closed   = resolved + timedelta(hours=2) if status == "Closed" else None
 
     tickets.append((
