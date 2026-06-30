@@ -17,6 +17,8 @@ x-airflow-common: &airflow-common
     - ./ingestion/dags:/opt/airflow/dags
     - ./logs/airflow:/opt/airflow/logs
     - ./scripts:/opt/airflow/scripts
+    - ./marts/customer360:/opt/airflow/scripts/dbt_project
+    - ./marts/profiles.yml:/opt/airflow/scripts/profiles.yml
   depends_on:
     postgres:
       condition: service_healthy
