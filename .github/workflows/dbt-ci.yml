@@ -1,0 +1,81 @@
+name: dbt CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'marts/**'
+      - 'infrastructure/postgres/**'
+      - '.github/workflows/dbt-ci.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'marts/**'
+      - 'infrastructure/postgres/**'
+
+jobs:
+  dbt-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: customer360
+          POSTGRES_DB: customer360
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install dbt-postgres==1.8.2 faker psycopg2-binary
+
+      - name: Apply database schema
+        run: |
+          for f in infrastructure/postgres/init/*.sql; do
+            PGPASSWORD=customer360 psql -h localhost -U postgres -d customer360 -f "$f"
+          done
+
+      - name: Generate sample data
+        run: python scripts/generate_data.py
+
+      - name: Create dbt profile
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << EOF
+          customer360:
+            target: dev
+            outputs:
+              dev:
+                type: postgres
+                host: localhost
+                port: 5432
+                database: customer360
+                user: postgres
+                password: customer360
+                schema: staging
+                threads: 4
+          EOF
+
+      - name: Run dbt models
+        working-directory: marts/customer360
+        run: dbt run
+
+      - name: Run dbt tests
+        working-directory: marts/customer360
+        run: dbt test
