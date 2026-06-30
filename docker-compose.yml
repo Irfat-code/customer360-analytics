@@ -105,6 +105,8 @@ services:
     image: ghcr.io/dbt-labs/dbt-postgres:1.8.2
     container_name: c360_dbt
     restart: "no"
+    ports:
+      - "8085:8085"
     environment:
       DBT_PROFILES_DIR: /usr/app/dbt
     volumes:

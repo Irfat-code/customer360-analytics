@@ -17,6 +17,26 @@ I built this project to simulate how a modern data team would centralize operati
 
 ---
 
+## Screenshots
+
+**dbt lineage graph** — staging models flowing into customer_health, churn_risk, and recommended_actions.
+
+![dbt lineage graph](docs/diagrams/dbt_lineage.png)
+
+**Airflow DAG** — the full pipeline running end to end: staging → marts → tests → audit log.
+
+![Airflow DAG](docs/diagrams/airflow_dag.png)
+
+**Churn risk distribution** — built in Metabase directly on top of the churn_risk mart.
+
+![Churn risk chart](docs/diagrams/metabase_churn_risk.png)
+
+**Recommended actions** — a focused view of Critical and High risk accounts, with tier-aware ownership and SLAs.
+
+![Recommended actions table](docs/diagrams/recommended_actions_table.png)
+
+---
+
 ## Architecture
 
 ```text
