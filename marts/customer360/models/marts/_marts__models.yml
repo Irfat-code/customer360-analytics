@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: customer_health
+    description: Composite health score per company combining subscription, support, and NPS signals.
+    columns:
+      - name: company_id
+        description: Unique identifier for each company.
+        data_tests:
+          - not_null
+          - unique
+
+  - name: churn_risk
+    description: Predictive churn risk scoring and categorization per company.
+    columns:
+      - name: company_id
+        description: Unique identifier for each company.
+        data_tests:
+          - not_null
+          - unique
+      - name: churn_risk_category
+        description: Risk bucket assigned to the account.
+        data_tests:
+          - accepted_values:
+              values: ['Low', 'Medium', 'High', 'Critical']
+
+  - name: recommended_actions
+    description: Reason-based customer success recommendations with owner and SLA.
+    columns:
+      - name: company_id
+        description: Unique identifier for each company.
+        data_tests:
+          - not_null
+          - unique
