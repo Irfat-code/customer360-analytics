@@ -35,6 +35,10 @@ I built this project to simulate how a modern data team would centralize operati
 
 ![Recommended actions table](docs/diagrams/recommended_actions_table.png)
 
+**Customer360 dashboard** — churn risk distribution, health score histogram, MRR by tier, and the critical accounts work queue, built in Metabase directly on the warehouse.
+
+![Customer360 dashboard](docs/diagrams/metabase_dashboard.png)
+
 ---
 
 ## Architecture
