@@ -4,9 +4,12 @@
 # Generates realistic enterprise data for all raw tables
 # =============================================================================
 
+import os
 import random
+import time
 import uuid
 from datetime import datetime, timedelta
+
 from faker import Faker
 import psycopg2
 from psycopg2.extras import execute_batch
@@ -16,15 +19,37 @@ random.seed(42)
 Faker.seed(42)
 
 # =============================================================================
+# DATABASE CONFIGURATION
+# Reads from environment variables with sensible local defaults.
+# Never hardcode credentials in source code.
+# =============================================================================
+DB_CONFIG = {
+    "host":     os.getenv("DB_HOST",     "127.0.0.1"),
+    "port":     int(os.getenv("DB_PORT", "5432")),
+    "database": os.getenv("DB_NAME",     "customer360"),
+    "user":     os.getenv("DB_USER",     "postgres"),
+    "password": os.getenv("DB_PASSWORD", "customer360"),
+}
+
+
+def wait_for_postgres(max_retries=10, delay=3):
+    for i in range(max_retries):
+        try:
+            conn = psycopg2.connect(**DB_CONFIG)
+            conn.close()
+            return
+        except psycopg2.OperationalError:
+            print(f"Waiting for PostgreSQL... ({i+1}/{max_retries})")
+            time.sleep(delay)
+    raise Exception("PostgreSQL did not become available in time.")
+
+
+wait_for_postgres()
+
+# =============================================================================
 # DATABASE CONNECTION
 # =============================================================================
-conn = psycopg2.connect(
-    host="127.0.0.1",
-    port=5432,
-    database="customer360",
-    user="postgres",
-    password="customer360"
-)
+conn = psycopg2.connect(**DB_CONFIG)
 cursor = conn.cursor()
 
 print("Connected to customer360 database.")
