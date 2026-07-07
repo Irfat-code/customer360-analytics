@@ -56,23 +56,24 @@ with DAG(
     )
 
     def log_pipeline_run():
-        import psycopg2
-        conn = psycopg2.connect(
-            host="postgres",
-            port=5432,
-            database="customer360",
-            user="postgres",
-            password="customer360"
-        )
-        cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO audit.pipeline_runs
-            (pipeline_name, source_system, status, started_at, completed_at)
-            VALUES (%s, %s, %s, NOW(), NOW())
-        """, ("customer360_pipeline", "airflow", "success"))
-        conn.commit()
-        cursor.close()
-        conn.close()
+    import os
+    import psycopg2
+    conn = psycopg2.connect(
+        host=os.getenv("DB_HOST", "postgres"),
+        port=int(os.getenv("DB_PORT", "5432")),
+        database=os.getenv("DB_NAME", "customer360"),
+        user=os.getenv("DB_USER", "postgres"),
+        password=os.getenv("DB_PASSWORD", "customer360")
+    )
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO audit.pipeline_runs
+        (pipeline_name, source_system, status, started_at, completed_at)
+        VALUES (%s, %s, %s, NOW(), NOW())
+    """, ("customer360_pipeline", "airflow", "success"))
+    conn.commit()
+    cursor.close()
+    conn.close()
 
     log_run = PythonOperator(
         task_id="log_pipeline_run",

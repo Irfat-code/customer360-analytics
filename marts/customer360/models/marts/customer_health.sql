@@ -70,21 +70,28 @@ final AS (
         s.last_renewal_date,
 
         -- Support metrics
+        -- Counts default to 0 (no tickets = no burden)
+        -- Averages stay NULL (no tickets = no data, not bad data)
         COALESCE(sup.total_tickets, 0)              AS total_support_tickets,
-        COALESCE(sup.avg_satisfaction_score, 0)     AS avg_satisfaction_score,
-        COALESCE(sup.avg_first_response_hours, 0)   AS avg_first_response_hours,
-        COALESCE(sup.avg_resolution_hours, 0)       AS avg_resolution_hours,
+        sup.avg_satisfaction_score                  AS avg_satisfaction_score,
+        sup.avg_first_response_hours                AS avg_first_response_hours,
+        sup.avg_resolution_hours                    AS avg_resolution_hours,
         COALESCE(sup.critical_tickets, 0)           AS critical_tickets,
         COALESCE(sup.tickets_last_30_days, 0)       AS tickets_last_30_days,
 
         -- NPS metrics
+        -- Count defaults to 0, average stays NULL (no survey = no opinion expressed)
         COALESCE(n.total_nps_responses, 0)          AS total_nps_responses,
-        COALESCE(n.avg_nps_score, 0)                AS avg_nps_score,
+        n.avg_nps_score                             AS avg_nps_score,
         COALESCE(n.promoters, 0)                    AS nps_promoters,
         COALESCE(n.detractors, 0)                   AS nps_detractors,
         n.last_nps_date,
 
         -- Health score (0-100)
+        -- Missing averages use neutral midpoints in the score calculation only:
+        -- NPS midpoint = 5 (middle of 0-10 scale)
+        -- Satisfaction midpoint = 3 (middle of 1-5 scale)
+        -- This means missing data is treated as neutral, not worst-case
         ROUND(
             LEAST(100, GREATEST(0,
                 -- NPS component (30 points max)

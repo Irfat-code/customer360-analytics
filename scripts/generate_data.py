@@ -257,7 +257,7 @@ for _ in range(NUM_TICKETS):
     created  = random_date(365, 0)
     first_r  = created + timedelta(hours=random.randint(1, 48))
     resolved = first_r + timedelta(hours=random.randint(1, 168))
-    status = random.choice(sub_statuses_weighted)
+    status = random.choice(ticket_statuses)
     closed   = resolved + timedelta(hours=2) if status == "Closed" else None
 
     tickets.append((
