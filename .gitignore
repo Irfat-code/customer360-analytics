@@ -38,3 +38,7 @@ Thumbs.db
 datasets/**/*.csv
 datasets/**/*.json
 datasets/**/*.parquet
+
+# Auto-generated dbt profile files
+scripts/profiles.yml
+scripts/.user.yml
